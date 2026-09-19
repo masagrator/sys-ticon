@@ -785,3 +785,160 @@ ams::Result NsROAppControlDataService::GetAppControlData22(u8 source, u8 flag1, 
 	}
 	return rc;
 }
+
+ams::Result NsROAppControlDataService::GetAppControlData23(u8 source, u8 flag1, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size) {
+	const struct {
+		u8 source;
+		u8 flag1;
+		u64 tid;
+	} in = {source, flag1, tid};
+
+	Result rc = serviceDispatchInOut(this->srv.get(), NsROAppControlDataInterfaceCmdId::GetAppControlData23, in, *out_size.GetPointer(),
+		.buffer_attrs = {SfBufferAttr_HipcMapAlias | SfBufferAttr_Out},
+		.buffers = {{buffer.GetPointer(), buffer.GetSize()}},
+	);
+
+	struct out_data {
+		u32 unk1;
+		u32 unk2;
+		u32 size;
+	};
+
+	out_data* data = (out_data*)out_size.GetPointer();
+
+	FILE_LOG_IPC_CLASS("(%u, 0x%016lx, buf[0x%lx]) out[0x%x] // %x", source, tid, buffer.GetSize(), data->size, rc);
+
+	if(R_SUCCEEDED(rc)) {
+		//_ProcessControlData(tid, buffer.GetPointer(), buffer.GetSize(), out_size.GetPointer());
+	}
+	return rc;
+}
+
+ams::Result NsROAppControlDataService::GetAppControlData24(u8 source, u8 flag1, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size) {
+	const struct {
+		u8 source;
+		u8 flag1;
+		u64 tid;
+	} in = {source, flag1, tid};
+
+	Result rc = serviceDispatchInOut(this->srv.get(), NsROAppControlDataInterfaceCmdId::GetAppControlData24, in, *out_size.GetPointer(),
+		.buffer_attrs = {SfBufferAttr_HipcMapAlias | SfBufferAttr_Out},
+		.buffers = {{buffer.GetPointer(), buffer.GetSize()}},
+	);
+
+	struct out_data {
+		u32 unk1;
+		u32 unk2;
+		u32 size;
+	};
+
+	out_data* data = (out_data*)out_size.GetPointer();
+
+	FILE_LOG_IPC_CLASS("(%u, 0x%016lx, buf[0x%lx]) out[0x%x] // %x", source, tid, buffer.GetSize(), data->size, rc);
+
+	if(R_SUCCEEDED(rc)) {
+		//_ProcessControlData(tid, buffer.GetPointer(), buffer.GetSize(), out_size.GetPointer());
+	}
+	return rc;
+}
+
+ams::Result NsROAppControlDataService::GetAppControlData25(u8 source, u8 flag1, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size) {
+	const struct {
+		u8 source;
+		u8 flag1;
+		u64 tid;
+	} in = {source, flag1, tid};
+
+	Result rc = serviceDispatchInOut(this->srv.get(), NsROAppControlDataInterfaceCmdId::GetAppControlData25, in, *out_size.GetPointer(),
+		.buffer_attrs = {SfBufferAttr_HipcMapAlias | SfBufferAttr_Out},
+		.buffers = {{buffer.GetPointer(), buffer.GetSize()}},
+	);
+
+	struct out_data {
+		u32 unk1;
+		u32 unk2;
+		u32 size;
+	};
+
+	out_data* data = (out_data*)out_size.GetPointer();
+
+	FILE_LOG_IPC_CLASS("(%u, 0x%016lx, buf[0x%lx]) out[0x%x] // %x", source, tid, buffer.GetSize(), data->size, rc);
+
+	if(R_SUCCEEDED(rc)) {
+		//_ProcessControlData(tid, buffer.GetPointer(), buffer.GetSize(), out_size.GetPointer());
+	}
+	return rc;
+}
+
+ams::Result NsROAppControlDataService::GetAppControlData26(u8 source, u8 flag1, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size) {
+	const struct {
+		u8 source;
+		u8 flag1;
+		u64 tid;
+	} in = {source, flag1, tid};
+
+	Result rc = serviceDispatchInOut(this->srv.get(), NsROAppControlDataInterfaceCmdId::GetAppControlData26, in, *out_size.GetPointer(),
+		.buffer_attrs = {SfBufferAttr_HipcMapAlias | SfBufferAttr_Out},
+		.buffers = {{buffer.GetPointer(), buffer.GetSize()}},
+	);
+
+	struct out_data {
+		u32 unk1;
+		u32 unk2;
+		u32 size;
+	};
+
+	out_data* data = (out_data*)out_size.GetPointer();
+
+	FILE_LOG_IPC_CLASS("(%u, 0x%016lx, buf[0x%lx]) out[0x%x] // %x", source, tid, buffer.GetSize(), data->size, rc);
+
+	if(R_SUCCEEDED(rc)) {
+		//_ProcessControlData(tid, buffer.GetPointer(), buffer.GetSize(), out_size.GetPointer());
+	}
+	return rc;
+}
+
+ams::Result NsROAppControlDataService::Unk27(u8 source, u8 flag1, ams::sf::InBuffer &in_buffer, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0x8> out_size) {
+	const struct {
+		u8 source;
+		u8 flag1;
+	} in = {source, flag1};
+
+	Result rc = serviceDispatchInOut(this->srv.get(), NsROAppControlDataInterfaceCmdId::Unk27, in, *out_size.GetPointer(),
+		.buffer_attrs = {SfBufferAttr_HipcMapAlias | SfBufferAttr_Out, SfBufferAttr_HipcMapAlias | SfBufferAttr_In},
+		.buffers = {{buffer.GetPointer(), buffer.GetSize()}, {in_buffer.GetPointer(), in_buffer.GetSize()}},
+	);
+
+	struct out_data {
+		u32 unk1;
+		u32 unk2;
+	};
+
+	out_data* data = (out_data*)out_size.GetPointer();
+
+	FILE_LOG_IPC_CLASS("(%u, in_buf[0x%lx], buf[0x%lx]) out[0x%x/0x%x] // %x", source, in_buffer.GetSize(), buffer.GetSize(), data->unk1, data->unk2, rc);
+
+	if(R_SUCCEEDED(rc)) {
+		//_ProcessControlData(tid, buffer.GetPointer(), buffer.GetSize(), out_size.GetPointer());
+	}
+	return rc;
+}
+
+ams::Result NsROAppControlDataService::Unk28(u8 source, u8 flag1, u64 tid) {
+	const struct {
+		u8 source;
+		u8 flag1;
+		u64 tid;
+	} in = {source, flag1, tid};
+
+	Result rc = serviceDispatchIn(this->srv.get(), NsROAppControlDataInterfaceCmdId::Unk28, in);
+
+	out_data* data = (out_data*)out_size.GetPointer();
+
+	FILE_LOG_IPC_CLASS("(%u, 0x%016lx) out[0x%x] // %x", source, tid, rc);
+
+	if(R_SUCCEEDED(rc)) {
+		//_ProcessControlData(tid, buffer.GetPointer(), buffer.GetSize(), out_size.GetPointer());
+	}
+	return rc;
+}
