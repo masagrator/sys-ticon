@@ -898,7 +898,7 @@ ams::Result NsROAppControlDataService::GetAppControlData26(u8 source, u8 flag1, 
 	return rc;
 }
 
-ams::Result NsROAppControlDataService::Unk27(u8 source, u8 flag1, ams::sf::InBuffer &in_buffer, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0x8> out_size) {
+ams::Result NsROAppControlDataService::Unk27(u8 source, u8 flag1, ams::sf::InBuffer &in_buffer, const ams::sf::OutBuffer &buffer, ams::sf::Out<u64> out_size) {
 	const struct {
 		u8 source;
 		u8 flag1;
