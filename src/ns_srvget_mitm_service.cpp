@@ -898,11 +898,7 @@ ams::Result NsROAppControlDataService::GetAppControlData26(u8 source, u8 flag1, 
 	return rc;
 }
 
-ams::Result NsROAppControlDataService::Unk27(u8 source, u8 flag1, ams::sf::InBuffer &in_buffer, const ams::sf::OutBuffer &buffer, ams::sf::Out<u64> out_size) {
-	const struct {
-		u8 source;
-		u8 flag1;
-	} in = {source, flag1};
+ams::Result NsROAppControlDataService::Unk27(u64 in, ams::sf::InBuffer &in_buffer, const ams::sf::OutBuffer &buffer, ams::sf::Out<u64> out_size) {
 
 	Result rc = serviceDispatchInOut(this->srv.get(), NsROAppControlDataInterfaceCmdId::Unk27, in, *out_size.GetPointer(),
 		.buffer_attrs = {SfBufferAttr_HipcMapAlias | SfBufferAttr_Out, SfBufferAttr_HipcMapAlias | SfBufferAttr_In},
@@ -916,7 +912,7 @@ ams::Result NsROAppControlDataService::Unk27(u8 source, u8 flag1, ams::sf::InBuf
 
 	out_data* data = (out_data*)out_size.GetPointer();
 
-	FILE_LOG_IPC_CLASS("(%u, in_buf[0x%lx], buf[0x%lx]) out[0x%x/0x%x] // %x", source, in_buffer.GetSize(), buffer.GetSize(), data->unk1, data->unk2, rc);
+	FILE_LOG_IPC_CLASS("(0x%lx, in_buf[0x%lx], buf[0x%lx]) out[0x%x/0x%x] // %x", in, in_buffer.GetSize(), buffer.GetSize(), data->unk1, data->unk2, rc);
 
 	if(R_SUCCEEDED(rc)) {
 		//_ProcessControlData(tid, buffer.GetPointer(), buffer.GetSize(), out_size.GetPointer());
@@ -924,18 +920,11 @@ ams::Result NsROAppControlDataService::Unk27(u8 source, u8 flag1, ams::sf::InBuf
 	return rc;
 }
 
-ams::Result NsROAppControlDataService::Unk28(u8 source, u8 flag1, u64 tid) {
-	const struct {
-		u8 source;
-		u8 flag1;
-		u64 tid;
-	} in = {source, flag1, tid};
+ams::Result NsROAppControlDataService::Unk28(Struct0x10 in) {
 
 	Result rc = serviceDispatchIn(this->srv.get(), NsROAppControlDataInterfaceCmdId::Unk28, in);
 
-	out_data* data = (out_data*)out_size.GetPointer();
-
-	FILE_LOG_IPC_CLASS("(%u, 0x%016lx) out[0x%x] // %x", source, tid, rc);
+	//FILE_LOG_IPC_CLASS("(%u, 0x%016lx) out[0x%x] // %x", source, tid, rc);
 
 	if(R_SUCCEEDED(rc)) {
 		//_ProcessControlData(tid, buffer.GetPointer(), buffer.GetSize(), out_size.GetPointer());
