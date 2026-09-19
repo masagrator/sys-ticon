@@ -65,7 +65,13 @@ enum NsROAppControlDataInterfaceCmdId : u32 {
 	GetAppControlData19              = 19,
 	GetAppControlData20              = 20,
 	GetAppControlData21              = 21,
-	GetAppControlData22              = 22
+	GetAppControlData22              = 22,
+	GetAppControlData23              = 23,
+	GetAppControlData24              = 24,
+	GetAppControlData25              = 25,
+	GetAppControlData26              = 26,
+	Unk27                            = 27,
+	Unk28                            = 28
 };
 
 #define NS_RO_APP_CONTROL_DATA_INTERFACE_INFO(C, H) \
@@ -91,7 +97,13 @@ enum NsROAppControlDataInterfaceCmdId : u32 {
 	AMS_SF_METHOD_INFO_F(C, H, NsROAppControlDataInterfaceCmdId, GetAppControlData19, (u8 source, u8 flag, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size), (source, flag, tid, buffer, out_size)) \
 	AMS_SF_METHOD_INFO_F(C, H, NsROAppControlDataInterfaceCmdId, GetAppControlData20, (u8 source, u8 flag1, u8 flag2, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size), (source, flag1, flag2, tid, buffer, out_size)) \
 	AMS_SF_METHOD_INFO_F(C, H, NsROAppControlDataInterfaceCmdId, GetAppControlData21, (u8 source, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size), (source, tid, buffer, out_size)) \
-	AMS_SF_METHOD_INFO_F(C, H, NsROAppControlDataInterfaceCmdId, GetAppControlData22, (u8 source, u8 flag1, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size), (source, flag1, tid, buffer, out_size))
+	AMS_SF_METHOD_INFO_F(C, H, NsROAppControlDataInterfaceCmdId, GetAppControlData22, (u8 source, u8 flag1, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size), (source, flag1, tid, buffer, out_size)) \
+	AMS_SF_METHOD_INFO_F(C, H, NsROAppControlDataInterfaceCmdId, GetAppControlData23, (u8 source, u8 flag1, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size), (source, flag1, tid, buffer, out_size)) \
+	AMS_SF_METHOD_INFO_F(C, H, NsROAppControlDataInterfaceCmdId, GetAppControlData24, (u8 source, u8 flag1, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size), (source, flag1, tid, buffer, out_size)) \
+	AMS_SF_METHOD_INFO_F(C, H, NsROAppControlDataInterfaceCmdId, GetAppControlData25, (u8 source, u8 flag1, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size), (source, flag1, tid, buffer, out_size)) \
+	AMS_SF_METHOD_INFO_F(C, H, NsROAppControlDataInterfaceCmdId, GetAppControlData26, (u8 source, u8 flag1, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size), (source, flag1, tid, buffer, out_size)) \
+	AMS_SF_METHOD_INFO_F(C, H, NsROAppControlDataInterfaceCmdId, Unk27, (u8 source, u8 flag1, ams::sf::InBuffer &in_buffer, const ams::sf::OutBuffer &buffer, ams::sf::Out<u64> out_size), (source, flag1, in_buffer, buffer, out_size)) \
+	AMS_SF_METHOD_INFO_F(C, H, NsROAppControlDataInterfaceCmdId, Unk28, (u8 source, u8 flag1, u64 tid), (source, flag1, tid))
 
 AMS_SF_DEFINE_INTERFACE_F(NsROAppControlDataInterface, NS_RO_APP_CONTROL_DATA_INTERFACE_INFO, 0x00000000);
 
