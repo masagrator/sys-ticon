@@ -12,7 +12,7 @@ include $(LIBAMS)/config/templates/stratosphere.mk
 # INCLUDES is a list of directories containing header files
 # EXEFS_SRC is the optional input directory containing data copied into exefs, if anything this normally should only contain "main.npdm".
 #---------------------------------------------------------------------------------
-VERSION     :=  1.0.8
+VERSION     :=  1.0.9
 TARGET		:=	sys-ticon
 BUILD		:=	build
 OUTDIR		:=	out
