@@ -786,6 +786,7 @@ ams::Result NsROAppControlDataService::GetAppControlData22(u8 source, u8 flag1, 
 	return rc;
 }
 
+//Used by capmtp 23.0.0+
 ams::Result NsROAppControlDataService::GetAppControlData23(u8 source, u8 flag1, u64 tid, const ams::sf::OutBuffer &buffer, ams::sf::Out<Struct0xC> out_size) {
 	const struct {
 		u8 source;
