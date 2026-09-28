@@ -20,8 +20,6 @@
 #include "ns_asyncvalue_mitm_service.hpp"
 #include "ns_asyncresult_mitm_service.hpp"
 
-#include "ns.h"
-
 struct Struct0x90 {
     u8 data[0x90];
 };
