@@ -1,7 +1,7 @@
 name: Build sys-ticon
 
 on:
-  workflow_dispatch:        # allow manual trigger
+  workflow_dispatch: # allow manual trigger
 
 permissions:
   contents: write
@@ -9,6 +9,14 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      DOCKER_RUN: >-
+        docker run --rm
+        -v ${{ github.workspace }}:/workspace
+        -v /tmp/libnx-install:/opt/devkitpro/libnx
+        -w /workspace
+        devkitpro/devkita64:latest
 
     steps:
       - name: Checkout repository
@@ -18,6 +26,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       # ── Submodule Update Checks ──────────────────────────────────────────
+
       - name: Check if Atmosphere has a newer release
         id: ams_check
         run: |
@@ -28,7 +37,6 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/Atmosphere-NX/Atmosphere/releases/latest)
-
           LATEST_TAG=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
           echo "Latest Atmosphere release tag: $LATEST_TAG"
 
@@ -36,9 +44,8 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/Atmosphere-NX/Atmosphere/git/ref/tags/${LATEST_TAG}")
-
           OBJ_TYPE=$(echo "$REF_JSON" | jq -r '.object.type')
-          OBJ_SHA=$(echo "$REF_JSON"  | jq -r '.object.sha')
+          OBJ_SHA=$(echo "$REF_JSON" | jq -r '.object.sha')
 
           if [ "$OBJ_TYPE" = "tag" ]; then
             RELEASE_COMMIT=$(curl -fsSL \
@@ -49,7 +56,6 @@ jobs:
           else
             RELEASE_COMMIT="$OBJ_SHA"
           fi
-
           echo "Atmosphere release commit: $RELEASE_COMMIT"
 
           if [ "$CURRENT_COMMIT" = "$RELEASE_COMMIT" ]; then
@@ -57,9 +63,9 @@ jobs:
             echo "needs_update=false" >> "$GITHUB_OUTPUT"
           else
             echo "Submodule is outdated. Will update to $RELEASE_COMMIT."
-            echo "needs_update=true"              >> "$GITHUB_OUTPUT"
+            echo "needs_update=true" >> "$GITHUB_OUTPUT"
             echo "release_commit=$RELEASE_COMMIT" >> "$GITHUB_OUTPUT"
-            echo "latest_tag=$LATEST_TAG"         >> "$GITHUB_OUTPUT"
+            echo "latest_tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Update lib/ams submodule
@@ -81,23 +87,34 @@ jobs:
       - name: Commit and push submodule update
         if: steps.ams_check.outputs.needs_update == 'true'
         run: |
-          git config user.name  "github-actions[bot]"
+          git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add lib/ams Makefile
           git commit -m "chore: update lib/ams to Atmosphere ${{ steps.ams_check.outputs.latest_tag }}, bump VERSION_MICRO"
           git push
 
-      # ── Containerized Build Steps ──────────────────────────────────────────
-      # We use inline Docker run commands so we can execute inside devkita64 
-      # while keeping the host runner intact for zipping and artifact uploading.
+      - name: Clone libnx (master)
+        run: |
+          git clone --depth 1 https://github.com/switchbrew/libnx.git /tmp/libnx-src
+          echo "libnx commit: $(git -C /tmp/libnx-src rev-parse HEAD)"
+          mkdir -p /tmp/libnx-install
+
+      - name: Build and install libnx
+        run: |
+          docker run --rm \
+            -v /tmp/libnx-src:/libnx-src \
+            -v /tmp/libnx-install:/libnx-out \
+            -w /libnx-src \
+            devkitpro/devkita64:latest \
+            bash -c 'make -j$(nproc) install && cp -a "$DEVKITPRO/libnx/." /libnx-out/'
 
       - name: Build libstrato
-        run: docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace devkitpro/devkita64:latest make -j4 libstrato
+        run: $DOCKER_RUN make -j4 libstrato
 
       - name: Build (default)
         run: |
-          docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace devkitpro/devkita64:latest make -j4
-          sudo chown -R $USER:$USER .  # Fix permissions for files created by Docker root user
+          $DOCKER_RUN make -j4
+          sudo chown -R $USER:$USER . # Fix permissions for files created by Docker root user
 
       - name: Pack default build
         run: zip -r default.zip out/
@@ -109,12 +126,12 @@ jobs:
           path: default.zip
 
       - name: Clean
-        run: docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace devkitpro/devkita64:latest make clean
+        run: $DOCKER_RUN make clean
 
       - name: Build (logging)
         run: |
-          docker run --rm -v ${{ github.workspace }}:/workspace -w /workspace devkitpro/devkita64:latest make TOGL_LOGGING=1 -j4
-          sudo chown -R $USER:$USER .  # Fix permissions for files created by Docker root user
+          $DOCKER_RUN make TOGL_LOGGING=1 -j4
+          sudo chown -R $USER:$USER . # Fix permissions for files created by Docker root user
 
       - name: Pack log build
         run: zip -r log.zip out/
