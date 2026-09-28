@@ -20,7 +20,7 @@
 
 
 static void ini_parse(const char* path, void* buffer, u64 tid, unsigned int entry_count = 16, bool update_data_format = true, bool update_display_version = true) {
-	Nacp* nacp = (Nacp*)buffer;
+	NacpStruct* nacp = (NacpStruct*)buffer;
 
 	ams::fs::FileHandle file;
 	if (R_FAILED(ams::fs::OpenFile(std::addressof(file), path, ams::fs::OpenMode_Read))) {
@@ -119,7 +119,7 @@ Result isJpegBaseline(const ams::fs::FileHandle file) {
 }
 
 [[maybe_unused]] static void _ProcessControlData(u64 tid, u8* buf, size_t buf_size, u32* out_size, u8 flag) {
-	if(buf_size < sizeof(Nacp)) {
+	if(buf_size < sizeof(NacpStruct)) {
 		return;
 	}
 
@@ -131,7 +131,7 @@ Result isJpegBaseline(const ams::fs::FileHandle file) {
 	if (has_file) ini_parse(path, buf, tid);
 	else FileUtils::LogLine("_ProcessControlData(%016lx) // config.ini was not found!", tid);
 
-	void* icon = &buf[sizeof(Nacp)];
+	void* icon = &buf[sizeof(NacpStruct)];
 
 	ams::util::TSNPrintf(path, sizeof(path), "sdmc:/atmosphere/contents/%016lx/icon%s.jpg", tid, flag ? "174" : "");
 	bool loaded = false;
@@ -145,7 +145,7 @@ Result isJpegBaseline(const ams::fs::FileHandle file) {
 		R_DISCARD(ams::fs::OpenFile(std::addressof(file), path, ams::fs::OpenMode_Read));
 		s64 size;
 		R_DISCARD(ams::fs::GetFileSize(&size, file));
-		if ((size_t)size <= buf_size - sizeof(Nacp)) {
+		if ((size_t)size <= buf_size - sizeof(NacpStruct)) {
 			Result jpeg_rc = isJpegBaseline(file);
 			if (jpeg_rc == 1) {
 				FileUtils::LogLine("_ProcessControlData(%016lx) // JPG is progressive! Only baseline is supported!", tid);
@@ -155,11 +155,11 @@ Result isJpegBaseline(const ams::fs::FileHandle file) {
 			}
 			else {
 				R_DISCARD(ams::fs::ReadFile(file, 0, icon, size));
-				*out_size = sizeof(Nacp) + size;
+				*out_size = sizeof(NacpStruct) + size;
 				loaded = true;
 			}
 		}
-		else FileUtils::LogLine("_ProcessControlData(%016lx) %u // JPG too big! File size: %d B, buffer size: %d B", tid, flag, size, buf-size - sizeof(Nacp));
+		else FileUtils::LogLine("_ProcessControlData(%016lx) %u // JPG too big! File size: %d B, buffer size: %d B", tid, flag, size, buf-size - sizeof(NacpStruct));
 	}
 	ON_SCOPE_EXIT { ams::fs::CloseFile(file); };
 
